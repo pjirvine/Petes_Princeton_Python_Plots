@@ -45,4 +45,34 @@ def get_2d_geomip(var, exp, stat, model='NorESM1-M', run='r1i1p1', time='11-50',
     else:
         return None
     
-  
+def ttest_sub(mean_1, std_1, nyears_1, mean_2, std_2, nyears_2, equal_var=True):
+
+    """
+    Sub-routine to call ttest_ind_from_stats from scipy
+    Checks that shapes match and turns integer years into correct format
+    returns pvalue.
+    """
+
+    # check shapes match
+    if (mean_1.shape, mean_1.shape, std_1.shape) != (std_1.shape, mean_2.shape, std_2.shape):
+        return "array shapes don't match"
+
+    # Convert nobs type
+    nyears_1 = int(nyears_1)
+    nyears_2 = int(nyears_2)
+
+    # Create arrays like others for nobs
+    nobs1_arr = (nyears_1-1) * np.ones_like(mean_1)
+    nobs2_arr = (nyears_2-1) * np.ones_like(mean_1)
+
+    """
+    # ttest_ind_from_stats
+    # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.ttest_ind_from_stats.html
+    """
+
+    ttest_out = ttest_ind_from_stats(mean_1, std_1, nobs1_arr, mean_2, std_2, nobs2_arr)
+
+    # An array of p-values matching the shape of the input arrays
+    pvalue_out = ttest_out[1]
+
+    return pvalue_out
