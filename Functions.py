@@ -8,11 +8,9 @@ Import needed modules
 
 import numpy as np
 import sys
-import cf
 import os.path
 
 from netCDF4 import Dataset
-from mpl_toolkits.basemap import Basemap
 from scipy.stats import ttest_ind_from_stats
 
 """
