@@ -7,11 +7,8 @@ Import needed modules
 """
 
 import numpy as np
-import pandas as pd
-import copy
 import sys
 import cf
-import itertools
 import os.path
 
 from netCDF4 import Dataset
@@ -23,7 +20,7 @@ Define functions
 """
 
 # This function retrieves the desired netcdf file.
-def get_2d_geomip(var, exp, stat, model='NorESM1-M', run='r1i1p1', time='11-50', seas='ann',
+def get_2d_geomip(var, exp, stat, var_internal, model='NorESM1-M', run='r1i1p1', time='11-50', seas='ann',
                     lon_lat=False, lat_name='lat', lon_name='lon'):
 
     """
@@ -37,11 +34,11 @@ def get_2d_geomip(var, exp, stat, model='NorESM1-M', run='r1i1p1', time='11-50',
     file_loc = "data/" + nc_file
 
     if os.path.isfile(file_loc):
-        f = cf.read(file_loc)
-        if lon_lat:
-            return (f.array.squeeze(), f.dim(lat_name).array, f.dim(lon_name).array)
+        f = Dataset(file_loc)
+        if lon_lat: # Return variable array, latitude array, longitude array
+            return (f.variables[var_internal][:].squeeze(), f.variables[lat_name][:], f.variables[lat_name][:])
         else:
-            return f.array.squeeze()
+            return f.variables[var_internal][:].squeeze()
     else:
         return None
     
