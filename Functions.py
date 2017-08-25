@@ -34,7 +34,7 @@ def get_2d_geomip(var, exp, stat, var_internal, model='NorESM1-M', run='r1i1p1',
     if os.path.isfile(file_loc):
         f = Dataset(file_loc)
         if lon_lat: # Return variable array, latitude array, longitude array
-            return (f.variables[var_internal][:].squeeze(), f.variables[lat_name][:], f.variables[lat_name][:])
+            return (f.variables[var_internal][:].squeeze(), f.variables[lat_name][:], f.variables[lon_name][:])
         else:
             return f.variables[var_internal][:].squeeze()
     else:
